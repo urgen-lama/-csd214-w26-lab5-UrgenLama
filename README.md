@@ -78,5 +78,28 @@ src/main/java/csd214/bookstore/
     └── MySqlRepository.java
 ```
 
+# Lab 5 Reflection
+
+## 1. The Power of the Interface
+Once the 3-tier architecture was established, no lines of code were modified in App.java or GuitarService when swapping repositories. <br>
+Analysis: Interfaces act as a "contract." Because the Service only knows it is talking to an IRepository, it doesn't care if the data is stored in a List, a Map, or a Database. This decoupling is essential for large teams because it allows developers to work on separate layers (UI vs. Data) simultaneously without creating "merge conflicts" or breaking each other's logic.
+
+## 2. Algorithmic Experience ($O(n)$ vs. $O(1)$)
+Implementing the HashMap felt significantly more efficient. <br>
+Analysis: In an ArrayList, the system must loop through every item until it finds a match ($O(n)$), which is slow for large datasets. The HashMap uses a key-based lookup ($O(1)$), providing near-instant access regardless of size. The Repository Pattern allows us to hide this complexity; the UI simply calls findById(), while we optimize the speed "under the hood."
+
+## 3. Production Stability vs. Development Speed
+While RAM-based storage is faster for development, MySqlRepository is the only choice for production.<br>
+Analysis: RAM is volatile; if the application closes or the server restarts, all data is lost. MySQL provides Persistence, ensuring data survives across sessions. In a modern workflow, Docker provides the "Stable Infrastructure" needed to keep these persistent databases consistent across different development and production environments.
+
+## 4. The Manual IoC Experience
+Moving all new keywords to Main.java felt like creating a "Wiring Closet" for the entire application.<br>
+Analysis: Centralizing instantiation makes the app easier to manage because you can see every dependency in one place. This "Wiring Phase" is exactly what Spring Boot does automatically. When Spring scans for @Service and @Repository, it is essentially building a giant internal version of our Main.java and "injecting" those objects wherever they are needed.
+
+## 5. Single Responsibility & Reusability
+Moving logic like applySeasonalTuneUp to the GuitarService made the presentation layer (App.java) much "cleaner" and focused only on user interaction.<br>
+Analysis: By moving logic to the Service Layer, it becomes a "Portable Brain." If we built a Mobile App or a Web API tomorrow, we could reuse 100% of the Service and Repository code. Only the "Presentation" (the UI) would need to be rewritten, demonstrating the high reusability of a layered system.
+
 ## ⚖️ License
 Educational use for CSD214 - Sault College.
+
